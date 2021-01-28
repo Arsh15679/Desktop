@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.support.freshdesksupport.model.Ticket;
 
-public interface SupportRepository extends CrudRepository<Ticket, Integer>{
+public interface TicketRepository extends CrudRepository<Ticket, Integer>{
 	
 }

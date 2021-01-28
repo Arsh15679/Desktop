@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.support.freshdesksupport.Ticket.TicketServiceInterface;
 import com.support.freshdesksupport.model.Customer;
 import com.support.freshdesksupport.service.ServiceInterface;
 //import com.support.freshdesksupport.service.Services;
@@ -15,29 +16,35 @@ import com.support.freshdesksupport.service.ServiceInterface;
 public class RestControllerDB {
 
 	@Autowired
-	private ServiceInterface service;
+	private ServiceInterface customerService;
+	@Autowired
+	private TicketServiceInterface ticketService;
 	
 	@GetMapping("/getCustomerDetails")
 	@ResponseBody
 	public Customer getCustomerDetails(@RequestParam(name = "id")int id) {
-		return service.getCustomer(id);
+		return customerService.getCustomer(id);
 	}
 	
 	@GetMapping("/registerCustomer")
 	@ResponseBody
 	public String registerCustomer(@RequestBody Customer customer) {
-		return service.registerCustomer(customer);
+		return customerService.registerCustomer(customer);
 	}
 	
 	@GetMapping("/updateCustomer")
 	@ResponseBody
 	public String updateCustomer(@RequestBody Customer customer) {
-		return service.updateCustomer(customer);
+		return customerService.updateCustomer(customer);
 	}
 	
 	@GetMapping("/getAllCustomerDetails")
 	@ResponseBody
 	public Iterable<Customer> getAllCustomerDetails() {
-		return service.showAllCustomer();
+		return customerService.showAllCustomer();
 	}
+	
+	
+	
+	
 }

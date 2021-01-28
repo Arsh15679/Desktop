@@ -9,16 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.support.freshdesksupport.dao.CustomerRepository;
-import com.support.freshdesksupport.dao.SupportRepository;
+import com.support.freshdesksupport.dao.OrganisationRepository;
+
 import com.support.freshdesksupport.model.Customer;
+import com.support.freshdesksupport.model.Organisation;
+
 
 @Service
 public class Services implements ServiceInterface{
 
 	@Autowired
-	private SupportRepository dao;
-	@Autowired
 	private CustomerRepository cusDao;
+	@Autowired
+	private OrganisationRepository orgDao;
 	
 	private static final Logger log = LoggerFactory.getLogger(Services.class);
 	
@@ -63,8 +66,14 @@ public class Services implements ServiceInterface{
 	
 	@Override
 	public Iterable<Customer> showAllCustomer() {
-		Iterable<Customer> itr = cusDao.findAll();
-		return itr;
+		Iterable<Customer> itr = null;
+		try {
+			itr = cusDao.findAll();
+			return itr;
+		} catch (Exception e) {
+			log.warn("Exception in showingAll Customer : " + e.getLocalizedMessage());
+			return  itr;
+		}
 	}
 	
 	@Override
@@ -73,6 +82,76 @@ public class Services implements ServiceInterface{
 		try {
 			if(cusDao.existsById(customer.getId())) {
 				cusDao.save(customer);
+				return "Updated Successfully";
+			}
+			else 
+				return "No customer found in this Name";
+		} catch (Exception e) {
+			log.warn("Exception in Updating Customer : " + e.getLocalizedMessage());
+			return "Exception Occured";
+
+		}
+	}
+	
+	
+	@Override
+	public Organisation getOrganisation(int id) {
+		Organisation dat;
+		try {
+			
+			if(orgDao.existsById(id)) {
+				Optional<Organisation> data = orgDao.findById(id);
+				dat = data.get();
+				return dat;
+			}else {
+				dat = new Organisation();
+				dat.setOrgName("No data Found");
+				return dat;
+				}
+		} catch (Exception e) {
+			log.warn("Exception in Registering Customer : " + e.getLocalizedMessage());
+			dat = new Organisation();
+			dat.setOrgName("Exception Occured");
+			return dat;
+		}
+		
+	}
+	
+	@Override
+	public String registerOrganisation(Organisation org) {
+		try {
+
+			if(orgDao.existsById(org.getOrgId()))
+				return "Customer Already Exist..!";
+			else 
+				orgDao.save(org);
+			return "Registered";
+		} catch (Exception e) {
+			log.warn("Exception in Registering Customer : " + org.getOrgName());
+			return "Error Occured";
+		}
+		
+	}
+	
+	@Override
+	public Iterable<Organisation> showAllOrganisation() {
+		Iterable<Organisation> itr = null;
+		try {
+			itr = orgDao.findAll();
+			return itr;
+		} catch (Exception e) {
+			log.warn("Exception in showingAll Customer : " + e.getLocalizedMessage());
+			return  itr;
+		}
+	}
+	
+
+	@Override
+	public String updateOrganisation(Organisation org) {
+		
+		try {
+			if(orgDao.existsById(org.getOrgId())) {
+				orgDao.save(org);
 				return "Updated Successfully";
 			}
 			else 
