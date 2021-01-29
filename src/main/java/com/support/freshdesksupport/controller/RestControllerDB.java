@@ -1,5 +1,9 @@
 package com.support.freshdesksupport.controller;
 
+/**
+ * @author MOHAMMED FAZIL
+ * 
+ */
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.support.freshdesksupport.Ticket.TicketServiceInterface;
 import com.support.freshdesksupport.model.Customer;
+import com.support.freshdesksupport.model.Organisation;
+import com.support.freshdesksupport.model.Ticket;
 import com.support.freshdesksupport.service.ServiceInterface;
-//import com.support.freshdesksupport.service.Services;
+
 
 @RestController
 public class RestControllerDB {
@@ -45,6 +51,41 @@ public class RestControllerDB {
 	}
 	
 	
+	@GetMapping("/getOrganisationDetails")
+	@ResponseBody
+	public Organisation getOrganisationDetails(@RequestParam(name = "id")int id) {
+		return customerService.getOrganisation(id);
+	}
 	
+	@GetMapping("/registerOrganisation")
+	@ResponseBody
+	public String registerOrgnisation(@RequestBody Organisation org) {
+		return customerService.registerOrganisation(org);
+	}
 	
+	@GetMapping("/updateOrganisation")
+	@ResponseBody
+	public String updateOrganisation(@RequestBody Organisation org) {
+		return customerService.updateOrganisation(org);
+	}
+	
+	@GetMapping("/getAllOrgDetails")
+	@ResponseBody
+	public Iterable<Organisation> getAllOrgDetails() {
+		return customerService.showAllOrganisation();
+	}
+	
+	@GetMapping("/raiseTicket")
+	@ResponseBody
+	public Ticket raiseTicket(@RequestParam(name = "msg")String msg, @RequestParam(name = "id")int id) {
+		
+		return ticketService.raiseTicket(msg,id);
+	}
+	
+	@GetMapping("/getTicketStatus")
+	@ResponseBody
+	public Ticket getTicketStatus(@RequestParam(name = "ticketId")int ticketId) {
+		
+		return ticketService.getTicketStatus(ticketId);
+	}
 }
