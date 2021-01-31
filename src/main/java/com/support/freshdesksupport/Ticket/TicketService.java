@@ -65,9 +65,12 @@ public class TicketService implements TicketServiceInterface{
 				if(ticket.getStatus().equalsIgnoreCase(Constants.raised) || ticket.getPriority().equalsIgnoreCase(Constants.low)) {
 					ticket.setStatus(Constants.pending);
 					long checkTime = System.currentTimeMillis()-sdf.parse(ticket.getDate()).getTime(); 
-					if(checkTime>259200000) {
+					if(checkTime > 259200000 && checkTime < 604800000) 
 						ticket.setPriority(Constants.medium);
-					}
+					else if(checkTime > 604800000 && checkTime < 864000000)
+						ticket.setPriority(Constants.high);
+					else if(checkTime > 864000000)
+						ticket.setPriority(Constants.immediate);
 					tDao.save(ticket);
 				}
 				Optional<Customer> cData = cusDao.findById(ticket.getCusId());
