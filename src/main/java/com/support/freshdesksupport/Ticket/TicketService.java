@@ -62,6 +62,14 @@ public class TicketService implements TicketServiceInterface{
 			if(tDao.existsById(ticketId)) {
 				Optional<Ticket> data = tDao.findById(ticketId);
 				ticket = data.get();
+				if(ticket.getStatus().equalsIgnoreCase(Constants.raised) || ticket.getPriority().equalsIgnoreCase(Constants.low)) {
+					ticket.setStatus(Constants.pending);
+					long checkTime = System.currentTimeMillis()-sdf.parse(ticket.getDate()).getTime(); 
+					if(checkTime>259200000) {
+						ticket.setPriority(Constants.medium);
+					}
+					tDao.save(ticket);
+				}
 				Optional<Customer> cData = cusDao.findById(ticket.getCusId());
 				ticket.setCust(cData.get());
 			}
