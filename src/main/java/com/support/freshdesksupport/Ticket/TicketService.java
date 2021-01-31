@@ -1,6 +1,7 @@
 package com.support.freshdesksupport.Ticket;
 
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.Random;
 
@@ -60,7 +61,6 @@ public class TicketService implements TicketServiceInterface{
 				Optional<Ticket> data = tDao.findById(ticketId);
 				ticket = data.get();
 				Optional<Customer> cData = cusDao.findById(ticket.getCusId());
-				
 				ticket.setCust(cData.get());
 			}
 			else {
@@ -71,5 +71,26 @@ public class TicketService implements TicketServiceInterface{
 			ticket.setError("Exception occured :" + ticketId);
 		}
 		return ticket;
+	}
+	
+	@Override
+	public Iterator<Ticket> getAllTicket() {
+		Iterator<Ticket> itr = null;
+		try {
+			log.warn("finding data");
+			itr = tDao.findAll().iterator();
+			log.warn("found in tables");
+			Optional<Customer> data ;
+			while(itr.hasNext()) {
+				log.warn(" while data fetching  ");
+				data = cusDao.findById(itr.next().getCusId());
+				itr.next().setCust(data.get());
+			}
+			log.warn("query done");
+		} catch (Exception e) {
+			log.warn(e.getLocalizedMessage());
+			itr.next().setError("Exception occured in Iterator");
+		}
+		return itr;
 	}
 }

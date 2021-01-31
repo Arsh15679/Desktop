@@ -1,5 +1,9 @@
 package com.support.freshdesksupport.controller;
 
+import java.util.Iterator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * @author MOHAMMED FAZIL
  * 
@@ -18,9 +22,13 @@ import com.support.freshdesksupport.model.Ticket;
 import com.support.freshdesksupport.service.ServiceInterface;
 
 
+
 @RestController
 public class RestControllerDB {
 
+	
+	private static final Logger log = LoggerFactory.getLogger(RestControllerDB.class);
+	
 	@Autowired
 	private ServiceInterface customerService;
 	@Autowired
@@ -87,5 +95,12 @@ public class RestControllerDB {
 	public Ticket getTicketStatus(@RequestParam(name = "ticketId")int ticketId) {
 		
 		return ticketService.getTicketStatus(ticketId);
+	}
+	
+	@GetMapping("/getAllTicket")
+	@ResponseBody
+	public Iterator<Ticket> getAllTicket(){
+		log.warn("getAllTicket API hit...");
+		return ticketService.getAllTicket();
 	}
 }
