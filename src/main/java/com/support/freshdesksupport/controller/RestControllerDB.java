@@ -1,6 +1,7 @@
 package com.support.freshdesksupport.controller;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +100,7 @@ public class RestControllerDB {
 	
 	@GetMapping("/getAllTicket")
 	@ResponseBody
-	public Iterator<Ticket> getAllTicket(){
+	public List<Ticket> getAllTicket(){
 		log.warn("getAllTicket API hit...");
 		return ticketService.getAllTicket();
 	}

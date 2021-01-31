@@ -1,6 +1,7 @@
 package com.support.freshdesksupport.Ticket;
 
 import java.util.Iterator;
+import java.util.List;
 
 import com.support.freshdesksupport.model.Ticket;
 
@@ -10,5 +11,5 @@ public interface TicketServiceInterface{
 
 	public Ticket getTicketStatus(int ticketId);
 
-	public Iterator<Ticket> getAllTicket();
+	public List<Ticket> getAllTicket();
 }

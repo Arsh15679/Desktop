@@ -1,7 +1,9 @@
 package com.support.freshdesksupport.Ticket;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -74,23 +76,27 @@ public class TicketService implements TicketServiceInterface{
 	}
 	
 	@Override
-	public Iterator<Ticket> getAllTicket() {
-		Iterator<Ticket> itr = null;
+	public List<Ticket> getAllTicket() {
+		List<Ticket> list = new ArrayList<>();
 		try {
 			log.warn("finding data");
-			itr = tDao.findAll().iterator();
+			Iterator<Ticket> itr = tDao.findAll().iterator();
 			log.warn("found in tables");
 			Optional<Customer> data ;
 			while(itr.hasNext()) {
+				Ticket tData = itr.next();
 				log.warn(" while data fetching  ");
-				data = cusDao.findById(itr.next().getCusId());
-				itr.next().setCust(data.get());
+				data = cusDao.findById(tData.getCusId());
+				tData.setCust(data.get());
+				list.add(tData);
 			}
 			log.warn("query done");
 		} catch (Exception e) {
+			Ticket tData = new Ticket();
 			log.warn(e.getLocalizedMessage());
-			itr.next().setError("Exception occured in Iterator");
+			tData.setError("Exception occured in Iterator");
+			list.add(tData);
 		}
-		return itr;
+		return list;
 	}
 }
