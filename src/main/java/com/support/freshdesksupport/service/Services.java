@@ -12,11 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sun.xml.bind.v2.runtime.reflect.opt.Const;
 import com.support.freshdesksupport.dao.CustomerRepository;
 import com.support.freshdesksupport.dao.OrganisationRepository;
-
+import com.support.freshdesksupport.data.Constants;
 import com.support.freshdesksupport.model.Customer;
 import com.support.freshdesksupport.model.Organisation;
+import com.support.freshdesksupport.model.Response;
 
 
 @Service
@@ -46,26 +48,30 @@ public class Services implements ServiceInterface{
 		} catch (Exception e) {
 			log.warn("Exception in Registering Customer : " + e.getLocalizedMessage());
 			dat = new Customer();
-			dat.setName("Exception Occured");
+			dat.setName(Constants.EXCEPTION);
 			return dat;
 		}
 		
 	}
 	
 	@Override
-	public String registerCustomer(Customer customer) {
+	public Response registerCustomer(Customer customer) {
+		Response res = new Response();
 		try {
 
-			if(cusDao.existsById(customer.getId()))
-				return "Customer Already Exist..!";
-			else 
+			if(cusDao.existsById(customer.getId())) {
+				res.setResponse(Constants.FAILURE);
+				res.setError("Customer Already Exist..!");
+			}else { 
 				cusDao.save(customer);
-			return "Registered";
+				res.setResponse(Constants.REGISTERED);
+			}
 		} catch (Exception e) {
 			log.warn("Exception in Registering Customer : " + customer.getName());
-			return "Error Occured";
+			res.setResponse(Constants.ERROR);
+			res.setError(Constants.EXCEPTION);
 		}
-		
+		return res;
 	}
 	
 	@Override
@@ -81,20 +87,23 @@ public class Services implements ServiceInterface{
 	}
 	
 	@Override
-	public String updateCustomer(Customer customer) {
-		
+	public Response updateCustomer(Customer customer) {
+		Response res = new Response();
 		try {
 			if(cusDao.existsById(customer.getId())) {
 				cusDao.save(customer);
-				return "Updated Successfully";
+				res.setResponse(Constants.UPDATED);
 			}
-			else 
-				return "No customer found in this Name";
+			else { 
+				res.setResponse(Constants.FAILURE);
+				res.setError("No customer found in this Name");
+			}
 		} catch (Exception e) {
 			log.warn("Exception in Updating Customer : " + e.getLocalizedMessage());
-			return "Exception Occured";
-
+			res.setResponse(Constants.ERROR);
+			res.setError(Constants.EXCEPTION);
 		}
+		return res;
 	}
 	
 	
@@ -115,26 +124,30 @@ public class Services implements ServiceInterface{
 		} catch (Exception e) {
 			log.warn("Exception in Registering Customer : " + e.getLocalizedMessage());
 			dat = new Organisation();
-			dat.setOrgName("Exception Occured");
+			dat.setOrgName(Constants.EXCEPTION);
 			return dat;
 		}
 		
 	}
 	
 	@Override
-	public String registerOrganisation(Organisation org) {
+	public Response registerOrganisation(Organisation org) {
+		Response res = new Response();
 		try {
 
-			if(orgDao.existsById(org.getOrgId()))
-				return "Customer Already Exist..!";
-			else 
+			if(orgDao.existsById(org.getOrgId())) {
+				res.setResponse(Constants.FAILURE);
+				res.setError("Organisation Already Exist..!");
+			}else { 
 				orgDao.save(org);
-			return "Registered";
+				res.setResponse(Constants.REGISTERED);
+			}
 		} catch (Exception e) {
 			log.warn("Exception in Registering Customer : " + org.getOrgName());
-			return "Error Occured";
+			res.setResponse(Constants.ERROR);
+			res.setError(Constants.EXCEPTION);
 		}
-		
+		return res;
 	}
 	
 	@Override
@@ -151,21 +164,47 @@ public class Services implements ServiceInterface{
 	
 
 	@Override
-	public String updateOrganisation(Organisation org) {
-		
+	public Response updateOrganisation(Organisation org) {
+		Response res = new Response();
 		try {
 			if(orgDao.existsById(org.getOrgId())) {
 				orgDao.save(org);
-				return "Updated Successfully";
+				res.setResponse(Constants.UPDATED);
 			}
-			else 
-				return "No customer found in this Name";
+			else {
+				res.setResponse(Constants.FAILURE);
+				res.setError("No organisation found in this Name");
+			}
 		} catch (Exception e) {
 			log.warn("Exception in Updating Customer : " + e.getLocalizedMessage());
-			return "Exception Occured";
+			res.setResponse(Constants.ERROR);
+			res.setError(Constants.EXCEPTION);
 
 		}
+		return res;
 	}
 	
+	@Override
+	public Response getOrgLogin(int orgId, String password) {
+		Response res = new Response();
+		try {
+			if(orgDao.existsById(orgId)) {
+				if(orgDao.findById(orgId).get().getPassword().equals(password)) {
+					res.setResponse(Constants.SUCCESS);
+				}else {
+					res.setResponse(Constants.FAILURE);
+					res.setError("wrong password");
+				}
+			}else {
+				res.setResponse(Constants.FAILURE);
+				res.setError("No Organisation found in this Id :" + orgId);
+			}
+		} catch (Exception e) {
+			log.warn("Exception in Login Organisa : " + e.getLocalizedMessage());
+			res.setResponse(Constants.ERROR);
+			res.setError(Constants.EXCEPTION);
+		}
+		return res;
+	}
 	
 }

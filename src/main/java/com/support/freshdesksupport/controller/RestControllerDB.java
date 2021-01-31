@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.support.freshdesksupport.Ticket.TicketServiceInterface;
 import com.support.freshdesksupport.model.Customer;
 import com.support.freshdesksupport.model.Organisation;
+import com.support.freshdesksupport.model.Response;
 import com.support.freshdesksupport.model.Ticket;
 import com.support.freshdesksupport.service.ServiceInterface;
 
@@ -43,13 +44,13 @@ public class RestControllerDB {
 	
 	@GetMapping("/registerCustomer")
 	@ResponseBody
-	public String registerCustomer(@RequestBody Customer customer) {
+	public Response registerCustomer(@RequestBody Customer customer) {
 		return customerService.registerCustomer(customer);
 	}
 	
 	@GetMapping("/updateCustomer")
 	@ResponseBody
-	public String updateCustomer(@RequestBody Customer customer) {
+	public Response updateCustomer(@RequestBody Customer customer) {
 		return customerService.updateCustomer(customer);
 	}
 	
@@ -68,13 +69,13 @@ public class RestControllerDB {
 	
 	@GetMapping("/registerOrganisation")
 	@ResponseBody
-	public String registerOrgnisation(@RequestBody Organisation org) {
+	public Response registerOrgnisation(@RequestBody Organisation org) {
 		return customerService.registerOrganisation(org);
 	}
 	
 	@GetMapping("/updateOrganisation")
 	@ResponseBody
-	public String updateOrganisation(@RequestBody Organisation org) {
+	public Response updateOrganisation(@RequestBody Organisation org) {
 		return customerService.updateOrganisation(org);
 	}
 	
@@ -104,4 +105,11 @@ public class RestControllerDB {
 		log.warn("getAllTicket API hit...");
 		return ticketService.getAllTicket();
 	}
+	
+	@GetMapping("/getOrgLogin")
+	@ResponseBody
+	public Response getOrgLogin(@RequestParam(name = "orgId") int orgId,@RequestParam(name = "password") String password) {
+		return customerService.getOrgLogin(orgId,password);
+	}
+	
 }

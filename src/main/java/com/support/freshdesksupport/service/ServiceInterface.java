@@ -2,22 +2,25 @@ package com.support.freshdesksupport.service;
 
 import com.support.freshdesksupport.model.Customer;
 import com.support.freshdesksupport.model.Organisation;
+import com.support.freshdesksupport.model.Response;
 
 public interface ServiceInterface {
 
-	public String registerCustomer(Customer customer);
+	public Response registerCustomer(Customer customer);
 	
 	public Customer getCustomer(int id);
 	
-	public String updateCustomer(Customer customer);
+	public Response updateCustomer(Customer customer);
 	
 	public Iterable<Customer> showAllCustomer();
 
 	public Organisation getOrganisation(int id);
 
-	public String registerOrganisation(Organisation org);
+	public Response registerOrganisation(Organisation org);
 
 	public Iterable<Organisation> showAllOrganisation();
 
-	public String updateOrganisation(Organisation org);
+	public Response updateOrganisation(Organisation org);
+
+	public Response getOrgLogin(int orgId, String password);
 }
