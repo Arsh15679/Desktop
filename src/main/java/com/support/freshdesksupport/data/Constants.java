@@ -2,9 +2,9 @@ package com.support.freshdesksupport.data;
 
 public class Constants {
 
-	public static final String low = "low";
+	public static final String LOW = "low";
 	
-	public static final String medium = "medium";
+	public static final String MEDIUM = "medium";
 	
 	public static final String high = "high";
 	

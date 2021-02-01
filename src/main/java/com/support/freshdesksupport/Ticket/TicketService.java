@@ -36,7 +36,7 @@ public class TicketService implements TicketServiceInterface{
 			if(cusDao.existsById(id)) {
 				Random rand = new Random();
 				ticket.setTicketId(rand.nextInt(10000));
-				ticket.setPriority(Constants.low);
+				ticket.setPriority(Constants.LOW);
 				ticket.setStatus(Constants.raised);
 				ticket.setIssue(msg);
 				Optional<Customer> data = cusDao.findById(id);
@@ -62,11 +62,11 @@ public class TicketService implements TicketServiceInterface{
 			if(tDao.existsById(ticketId)) {
 				Optional<Ticket> data = tDao.findById(ticketId);
 				ticket = data.get();
-				if(ticket.getStatus().equalsIgnoreCase(Constants.raised) || ticket.getPriority().equalsIgnoreCase(Constants.low)) {
+				if(ticket.getStatus().equalsIgnoreCase(Constants.raised) || ticket.getPriority().equalsIgnoreCase(Constants.LOW)) {
 					ticket.setStatus(Constants.pending);
 					long checkTime = System.currentTimeMillis()-sdf.parse(ticket.getDate()).getTime(); 
 					if(checkTime>259200000) {
-						ticket.setPriority(Constants.medium);
+						ticket.setPriority(Constants.MEDIUM);
 					}
 					tDao.save(ticket);
 				}
