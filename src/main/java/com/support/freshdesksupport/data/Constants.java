@@ -6,14 +6,14 @@ public class Constants {
 	
 	public static final String MEDIUM = "medium";
 	
-	public static final String high = "high";
+	public static final String HIGH = "high";
 	
-	public static final String immediate = "immediate";
+	public static final String IMMEDIATE = "immediate";
 	
-	public static final String raised = "raised";
+	public static final String RAISED = "raised";
 	
-	public static final String pending = "pending";
+	public static final String PENDING = "pending";
 	
-	public static final String closed = "closed";
+	public static final String CLOSED = "closed";
 	
 }

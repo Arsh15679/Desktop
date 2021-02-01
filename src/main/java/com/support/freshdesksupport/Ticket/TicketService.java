@@ -37,7 +37,7 @@ public class TicketService implements TicketServiceInterface{
 				Random rand = new Random();
 				ticket.setTicketId(rand.nextInt(10000));
 				ticket.setPriority(Constants.LOW);
-				ticket.setStatus(Constants.raised);
+				ticket.setStatus(Constants.RAISED);
 				ticket.setIssue(msg);
 				Optional<Customer> data = cusDao.findById(id);
 				ticket.setCust(data.get());
@@ -62,24 +62,15 @@ public class TicketService implements TicketServiceInterface{
 			if(tDao.existsById(ticketId)) {
 				Optional<Ticket> data = tDao.findById(ticketId);
 				ticket = data.get();
-<<<<<<< HEAD
-				if(ticket.getStatus().equalsIgnoreCase(Constants.raised) || ticket.getPriority().equalsIgnoreCase(Constants.LOW)) {
-					ticket.setStatus(Constants.pending);
-					long checkTime = System.currentTimeMillis()-sdf.parse(ticket.getDate()).getTime(); 
-					if(checkTime>259200000) {
-						ticket.setPriority(Constants.MEDIUM);
-					}
-=======
-				if(ticket.getStatus().equalsIgnoreCase(Constants.raised) || ticket.getPriority().equalsIgnoreCase(Constants.LOW) ) {
-					ticket.setStatus(Constants.pending);
+				if(ticket.getStatus().equalsIgnoreCase(Constants.RAISED) || ticket.getPriority().equalsIgnoreCase(Constants.LOW) ) {
+					ticket.setStatus(Constants.PENDING);
 					long checkTime = System.currentTimeMillis()-sdf.parse(ticket.getDate()).getTime(); 
 					if(checkTime > 259200000 && checkTime < 604800000 || ticket.getResponse()==null) 
 						ticket.setPriority(Constants.MEDIUM);
 					else if(checkTime > 604800000 && checkTime < 864000000)
-						ticket.setPriority(Constants.high);
+						ticket.setPriority(Constants.HIGH);
 					else if(checkTime > 864000000)
-						ticket.setPriority(Constants.immediate);
->>>>>>> 2ed1677a77f2d5813b07c914e37e2db23b9da243
+						ticket.setPriority(Constants.IMMEDIATE);
 					tDao.save(ticket);
 				}
 				Optional<Customer> cData = cusDao.findById(ticket.getCusId());
