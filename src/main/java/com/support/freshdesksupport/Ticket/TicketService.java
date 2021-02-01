@@ -37,13 +37,14 @@ public class TicketService implements TicketServiceInterface{
 				Random rand = new Random();
 				ticket.setTicketId(rand.nextInt(10000));
 				ticket.setPriority(Constants.LOW);
-				ticket.setStatus(Constants.RAISED);
+				ticket.setStatus(Constants.PENDING);
 				ticket.setIssue(msg);
 				Optional<Customer> data = cusDao.findById(id);
 				ticket.setCust(data.get());
 				ticket.setCusId(data.get().getId());
 				ticket.setDate(sdf.format(System.currentTimeMillis()));
 				tDao.save(ticket);
+				ticket.setStatus(Constants.RAISED);
 			}else {
 				ticket.setError("No Customer Found in this Id :" + id);
 			}
@@ -62,17 +63,23 @@ public class TicketService implements TicketServiceInterface{
 			if(tDao.existsById(ticketId)) {
 				Optional<Ticket> data = tDao.findById(ticketId);
 				ticket = data.get();
-				if(ticket.getStatus().equalsIgnoreCase(Constants.RAISED) || ticket.getPriority().equalsIgnoreCase(Constants.LOW) ) {
-					ticket.setStatus(Constants.PENDING);
+				boolean trigger = false;
 					long checkTime = System.currentTimeMillis()-sdf.parse(ticket.getDate()).getTime(); 
-					if(checkTime > 259200000 && checkTime < 604800000 || ticket.getResponse()==null) 
+					if(checkTime > 259200000 && checkTime < 604800000) {
 						ticket.setPriority(Constants.MEDIUM);
-					else if(checkTime > 604800000 && checkTime < 864000000)
+						trigger = true;
+					}
+					else if(checkTime > 604800000 && checkTime < 864000000) {
 						ticket.setPriority(Constants.HIGH);
-					else if(checkTime > 864000000)
+						trigger=true;
+					}
+					else if(checkTime > 864000000) {
 						ticket.setPriority(Constants.IMMEDIATE);
-					tDao.save(ticket);
-				}
+						trigger=true;
+					}
+					if(trigger)
+						tDao.save(ticket);
+				
 				Optional<Customer> cData = cusDao.findById(ticket.getCusId());
 				ticket.setCust(cData.get());
 			}
